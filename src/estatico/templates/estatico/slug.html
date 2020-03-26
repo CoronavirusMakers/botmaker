@@ -1,4 +1,5 @@
 {% extends "estatico/base.html" %}
+{% load estatico_extras %}
 
 {% block title %}
     {{ pagina.slug }}
@@ -6,5 +7,8 @@
 
 {% block content %}
     <h2>/{{ pagina.slug }}</h2>
-    {{ pagina.texto }}
+    {% autoescape off %}
+        {{ pagina.texto|convierte }}
+    {% endautoescape %}
+
 {% endblock %}
