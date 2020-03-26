@@ -2,3 +2,4 @@ django
 django_extensions
 gunicorn
 pyTelegramBotAPI
+python-decouple==3.1
