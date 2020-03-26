@@ -1,1 +1,10 @@
----
+{% extends "estatico/base.html" %}
+
+{% block title %}
+    {{ pagina.slug }}
+{% endblock %}
+
+{% block content %}
+    <h2>/{{ pagina.slug }}</h2>
+    {{ pagina.texto }}
+{% endblock %}

@@ -5,11 +5,11 @@ urlpatterns = [
     url(
         r'^$',
         classviews.EstaticoView.as_view(),
-        name='estatico',
+        name='estatico_view',
     ),
     url(
         r'^(?P<slug>[\w-]+)/$',
         classviews.EstaticoSlugView.as_view(),
-        name='estatico_slug',
+        name='estatico_slug_view',
     ),
 ]

@@ -1,9 +1,14 @@
-from django.views.generic import TemplateView
+from django.views import generic
+from . import models
 
 
-class EstaticoView(TemplateView):
+class EstaticoView(generic.list.ListView):
+    model = models.Pagina
     template_name = "estatico/index.html"
 
 
-class EstaticoSlugView(TemplateView):
+class EstaticoSlugView(generic.DetailView):
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+    model = models.Pagina
     template_name = "estatico/slug.html"
