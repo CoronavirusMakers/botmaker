@@ -9,18 +9,17 @@ from estatico.models import Pagina
 def bot_command_all(bot, message):
     u = TelegramUser.get_or_update(message.from_user)
     if message.content_type == "location":
-        print("location=", message.location.latitude, message.location.longitude)
+        print("latitude='{}' longitude='{}'".format(message.location.latitude, message.location.longitude))
     elif message.content_type == "contact":
-        print("contact=", message.contact.phone_number)
+        print("contact='{}'".format(message.contact.phone_number))
     elif message.content_type == "text":
         comando = message.text.strip()
-        print(message)
         try:
             p = Pagina.objects.get(slug=comando)
             msg = p.texto
         except Pagina.DoesNotExist:
-            msg = "No entiendo el comando {}".format(comando)
-        print("mensaje=", message.text.strip(), "reply=", msg)
+            msg = "No entiendo el comando '{}'".format(comando)
+        print("mensaje='{}' reply='{}'".format(message.text.strip(), msg))
         bot.send_message(u.ident, msg)
     else:
         print("error", message)
