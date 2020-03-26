@@ -2,7 +2,7 @@ from django.views import generic
 from . import models
 
 
-class EstaticoView(generic.list.ListView):
+class EstaticoView(generic.ListView):
     model = models.Pagina
     template_name = "estatico/index.html"
 
