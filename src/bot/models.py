@@ -2,9 +2,10 @@ from django.db import models
 
 
 class TelegramUser(models.Model):
+    creation_date = models.DateTimeField(auto_now_add=True)
     ident = models.IntegerField()
     first_name = models.CharField(max_length=255)
-    username = models.CharField(max_length=255)
+    username = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
     is_bot = models.BooleanField()
     language_code = models.CharField(max_length=255, blank=True, null=True)
