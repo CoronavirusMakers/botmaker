@@ -1,0 +1,9 @@
+Hacer que "estatico" sea navegable para comprobar que todo está bien definido
+sin tenerlo que hacer con el bot.
+
+- Habilitar http://localhost:8000/estatico/(cosa) que muestre la pagina con slug=(cosa)
+- podemos meter la página dentro de una plantilla grande
+- hacer una funcion hiperlinkar(s) que, dada una string s, sustituya los /enlaces por <a href="{% url "raiz_estatico" %}/enlaces">/enlaces</a> para que sean pinchables (sugerencia: import re)
+- en lo de arriba usar eso
+- Y habilitar http://localhost:8000/estatico/ (raiz_estatico) que muestre una lista de lo que hay (y usar la funcion de arriba)
+- podemos ponerle un @login_required pero no es necesario tampoco
