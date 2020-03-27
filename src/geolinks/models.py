@@ -36,6 +36,10 @@ class Place(models.Model):
     def content(self):
         return render_to_string("geolinks/place_detail.md", {'object': self})
 
+    @staticmethod
+    def all_content():
+        return render_to_string("geolinks/place_list.md", {'object_list': Place.objects.countries().with_uris()})
+
     def update_uris(self):
         self.uris = self.uri_set.count() + sum(Place.objects.filter(parent=self).values_list('uris', flat=True))
         self.save()

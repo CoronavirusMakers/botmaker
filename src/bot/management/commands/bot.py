@@ -35,6 +35,8 @@ def bot_command_all(bot, message):
         command = message.text.strip()
         if command == "/web":
             msg = u.reset_or_create_webuser_message()
+        elif command == "/world":
+            msg = Place.all_content()
         else:
             msg = check_place(command) or check_page(command) or \
                 "No entiendo el command '{}'".format(command)
