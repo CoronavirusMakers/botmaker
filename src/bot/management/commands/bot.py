@@ -3,7 +3,7 @@ import telebot
 from django.core.management.base import BaseCommand  # , CommandError
 from django.conf import settings
 from bot.models import TelegramUser
-from estatico.models import Pagina
+from pages.models import Page
 
 
 def bot_command_all(bot, message):
@@ -13,15 +13,15 @@ def bot_command_all(bot, message):
     elif message.content_type == "contact":
         print("contact='{}'".format(message.contact.phone_number))
     elif message.content_type == "text":
-        comando = message.text.strip()
-        if comando == "/web":
+        command = message.text.strip()
+        if command == "/web":
             msg = u.reset_or_create_webuser_message()
         else:
             try:
-                p = Pagina.objects.get(slug=comando)
+                p = Page.objects.get(slug=command)
                 msg = p.texto
-            except Pagina.DoesNotExist:
-                msg = "No entiendo el comando '{}'".format(comando)
+            except Page.DoesNotExist:
+                msg = "No entiendo el command '{}'".format(command)
         print("mensaje='{}' reply='{}'".format(message.text.strip(), msg))
         bot.send_message(u.ident, msg, parse_mode="Markdown")
     else:
@@ -29,7 +29,7 @@ def bot_command_all(bot, message):
 
 
 class Command(BaseCommand):
-    help = "Importa un extracto de lineas de cajasiete"
+    help = "Bot para telegram"
 
     def handle(self, *app_labels, **options):
 
