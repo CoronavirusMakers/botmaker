@@ -45,7 +45,8 @@ class Uri(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     url = models.URLField()
-    validated = models.BooleanField(default=False)
+    permanent = models.BooleanField(default=False, help_text="Iniciativa permanente o solo para el coronavirus")
+    validated = models.BooleanField(default=False, help_text="Al validarse se hace visible")
 
 
 @receiver(post_save, sender=Uri)

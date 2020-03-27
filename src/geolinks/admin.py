@@ -13,3 +13,4 @@ class PlaceAdmin(admin.ModelAdmin):
 class UriAdmin(admin.ModelAdmin):
     list_display = ('place', 'url')
     autocomplete_fields = ('place', )
+    list_filter = ('permanent', 'validated')
