@@ -61,5 +61,12 @@ class TelegramUser(models.Model):
                 pass  # print("not changed")
         return t
 
+    @property
+    def nick(self):
+        if self.username:
+            return "@" + self.username
+        else:
+            return "#" + str(self.ident)
+
     def __str__(self):
-        return "{} {} ({})".format(self.first_name, self.last_name or "", "@" + self.username or str(self.ident))
+        return "{} {} ({})".format(self.first_name, self.last_name or "", self.nick)

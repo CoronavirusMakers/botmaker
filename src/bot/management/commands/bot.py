@@ -1,11 +1,11 @@
 import telebot
+import datetime
 # from telebot import types
 from django.core.management.base import BaseCommand  # , CommandError
 from django.conf import settings
 from bot.models import TelegramUser
 from pages.models import Page
 from geolinks.models import Place
-
 
 def check_place(command):
     if not command.startswith("/"):
@@ -40,7 +40,9 @@ def bot_command_all(bot, message):
         else:
             msg = check_place(command) or check_page(command) or \
                 "No entiendo el command '{}'".format(command)
-        print("user='{}' mensaje='{}' reply='{}'".format(u, message.text.strip(), repr(msg[:40])))
+        print("{} user='{}' mensaje={} reply={}".format(
+            datetime.datetime.now().time(), 
+            u.nick, repr(message.text.strip()), repr(msg[:40])))
         bot.send_message(u.ident, msg, parse_mode="Markdown")
     else:
         print("error", message)
