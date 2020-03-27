@@ -13,7 +13,7 @@ def generate_password(n=10):
 
 class TelegramUser(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
-    ident = models.IntegerField()
+    ident = models.IntegerField(unique=True)
     first_name = models.CharField(max_length=255)
     username = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
@@ -55,10 +55,10 @@ class TelegramUser(models.Model):
                     setattr(t, key, value)
                     changed = True
             if changed:
-                print("saving")
+                print("saving", t)
                 t.save()
             else:
-                print("not changed")
+                pass  # print("not changed")
         return t
 
     def __str__(self):
