@@ -1,11 +1,9 @@
 Ver /world {% for parent in object.parents %} {{parent.name}} /{{parent.slugq}}{% endfor %}
 
 {% if object.place_set.count or object.uri_set.count %}Estos son los contenidos que hay en {{object.name}}: 
-
 {% if object.place_set.count %}{% regroup object.place_set.all by subdivision as subdivisions %} 
 {% for subdivision in subdivisions %}{% if subdivision.list %}
-Por {{subdivision.grouper}}:
-{% for child in subdivision.list %}
+Por {{subdivision.grouper}}:{% for child in subdivision.list %}
 /{{child.slugq}} {{child.name}} ({{child.uris}}){% endfor %}{% endif %}
 {% endfor %}
 {% endif %}
