@@ -9,6 +9,12 @@ class PlaceAdmin(admin.ModelAdmin):
     list_display = ('slug', 'name')
 
 
+@admin.register(models.Subdivision)
+class SubdivisionAdmin(admin.ModelAdmin):
+    search_fields = ('name', )
+    list_display = ('name', )
+
+
 @admin.register(models.Uri)
 class UriAdmin(admin.ModelAdmin):
     list_display = ('title', 'url', 'summary', 'place')

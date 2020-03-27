@@ -11,9 +11,17 @@ class PlaceQuerySet(models.QuerySet):
         return self.filter(uris__gt=0)
 
 
+class Subdivision(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
 class Place(models.Model):
     slug = models.SlugField(max_length=10, unique=True)
     name = models.CharField(max_length=255)
+    subdivision = models.ForeignKey(Subdivision, on_delete=models.CASCADE)
     parent = models.ForeignKey('geolinks.Place', on_delete=models.CASCADE, blank=True, null=True)
     uris = models.IntegerField(default=0)
 
@@ -35,7 +43,7 @@ class Place(models.Model):
         return "{} ({})".format(self.name, self.slug)
 
     class Meta:
-        ordering = ('name', )
+        ordering = ('subdivision', 'name', )
         verbose_name = "lugar"
         verbose_name_plural = "lugares"
 

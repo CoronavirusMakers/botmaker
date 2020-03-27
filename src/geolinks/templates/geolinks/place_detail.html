@@ -6,10 +6,13 @@
 
 <h1>{{object.name}} ({{object.uris}})</h1>
 
-<h2>Hijos</h2>
+{% regroup object.place_set.all by subdivision as subdivisions %}
+
+{% for subdivision in subdivisions %}
+<h2>{{subdivision.grouper}}</h2>
 
 <ul>
-	{% for child in object.place_set.all %}
+	{% for child in subdivision.list %}
 	<li>
 		<a href="{% url 'geolinks_place' child.slug %}">{{child.name}}</a> ({{child.uris}}):
 	</li>
@@ -17,6 +20,7 @@
 	<li>(no existen)</li>
 	{% endfor %}
 </ul>
+{% endfor %}
 
 <h2>Recursos</h2>
 

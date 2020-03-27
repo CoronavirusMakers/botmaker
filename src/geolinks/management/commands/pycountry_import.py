@@ -1,14 +1,20 @@
 from django.core.management.base import BaseCommand  # , CommandError
 import pycountry
-from geolinks.models import Place
+from geolinks.models import Place, Subdivision
 
 
-def get_crea_place(place):
-    if place.parent:
-        parent = get_crea_place(place.parent)
+def get_create_subdivision(name):
+    sd, created = Subdivision.objects.get_or_create(name=name)
+    return sd
+
+
+def get_create_place(placedata):
+    if placedata.parent:
+        parent = get_create_place(placedata.parent)
     else:
-        parent = Place.objects.get(slug=place.country.alpha_2)
-    p, created = Place.objects.get_or_create(slug=place.code, defaults={'name': place.name, 'parent': parent})
+        parent = Place.objects.get(slug=placedata.country.alpha_2)
+    defaults = {'name': placedata.name, 'parent': parent, 'subdivision_id': get_create_subdivision(placedata.type).id}
+    p, created = Place.objects.get_or_create(slug=placedata.code, defaults=defaults)
     return p
 
 
@@ -18,7 +24,9 @@ class Command(BaseCommand):
     def handle(self, *app_labels, **options):
 
         for country in pycountry.countries:
-            c, created = Place.objects.get_or_create(slug=country.alpha_2, defaults={'name': country.name})
+            defaults = {'name': country.name, 'subdivision': get_create_subdivision('Country')}
+            c, created = Place.objects.get_or_create(slug=country.alpha_2, defaults=defaults)
 
-        for place in pycountry.subdivisions:
-            get_crea_place(place)
+        for placedata in pycountry.subdivisions:
+            print(placedata)
+            get_create_place(placedata)
