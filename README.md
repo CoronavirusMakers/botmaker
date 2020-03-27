@@ -16,6 +16,8 @@ Ejecuta `./manage.sh` y te creará el `.virtualenv` y más cosas.
 
 Ejecuta `./manage.sh changepassword admin` para definir la contraseña del usuario `admin`.
 
+Ejecuta `./manage.sh pycountry_import` para rellenar la base de datos de paises.
+
 Escribe en el fichero `.env` lo siguiente:
 ```
 SECRET_KEY = 'una_string_complicada'
