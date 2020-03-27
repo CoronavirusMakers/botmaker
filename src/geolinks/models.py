@@ -52,7 +52,7 @@ class Place(models.Model):
 class Uri(models.Model):
     place = models.ForeignKey(Place, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
     url = models.URLField()
     location = PlainLocationField(based_fields=['place'], zoom=7, blank=True, null=True)
     permanent = models.BooleanField(default=False, help_text="Iniciativa permanente o solo para el coronavirus")
@@ -60,7 +60,9 @@ class Uri(models.Model):
 
     @property
     def summary(self, n=60):
-        if len(self.description) > n:
+        if not self.description:
+            return "-"
+        elif len(self.description) > n:
             return self.description[:n] + "..."
         else:
             return self.description

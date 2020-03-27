@@ -24,7 +24,7 @@ class TelegramUser(models.Model):
     def reset_or_create_webuser_message(self):
         defaults_dict = {
             'first_name': self.first_name,
-            'last_name': self.last_name,
+            'last_name': self.last_name or "-",
             'is_active': True,
         }
         if not self.web_enabled or not self.username:

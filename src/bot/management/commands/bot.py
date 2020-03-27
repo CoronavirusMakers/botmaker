@@ -19,7 +19,7 @@ def bot_command_all(bot, message):
         else:
             try:
                 p = Page.objects.get(slug=command)
-                msg = p.texto
+                msg = p.text
             except Page.DoesNotExist:
                 msg = "No entiendo el command '{}'".format(command)
         print("mensaje='{}' reply='{}'".format(message.text.strip(), msg))
