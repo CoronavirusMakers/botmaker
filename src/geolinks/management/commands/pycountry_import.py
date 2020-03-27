@@ -8,12 +8,20 @@ def get_create_subdivision(name):
     return sd
 
 
+def repair(s):
+    return s.replace("-", "_")  # no funciona como /link_en telegram
+
+
 def get_create_place(placedata):
     if placedata.parent:
         parent = get_create_place(placedata.parent)
     else:
-        parent = Place.objects.get(slug=placedata.country.alpha_2)
-    defaults = {'name': placedata.name, 'parent': parent, 'subdivision_id': get_create_subdivision(placedata.type).id}
+        parent = Place.objects.get(slug=repair(placedata.country.alpha_2))
+    defaults = {
+        'name': placedata.name,
+        'parent': parent,
+        'subdivision_id': get_create_subdivision(placedata.type).id,
+    }
     p, created = Place.objects.get_or_create(slug=placedata.code, defaults=defaults)
     return p
 
@@ -25,8 +33,7 @@ class Command(BaseCommand):
 
         for country in pycountry.countries:
             defaults = {'name': country.name, 'subdivision': get_create_subdivision('Country')}
-            c, created = Place.objects.get_or_create(slug=country.alpha_2, defaults=defaults)
+            c, created = Place.objects.get_or_create(slug=repair(country.alpha_2), defaults=defaults)
 
         for placedata in pycountry.subdivisions:
-            print(placedata)
             get_create_place(placedata)

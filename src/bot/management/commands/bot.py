@@ -4,6 +4,25 @@ from django.core.management.base import BaseCommand  # , CommandError
 from django.conf import settings
 from bot.models import TelegramUser
 from pages.models import Page
+from geolinks.models import Place
+
+
+def check_place(command):
+    if not command.startswith("/"):
+        return False
+    try:
+        place = Place.objects.get(slug=command[1:])
+    except Place.DoesNotExist:
+        return False
+    return place.content()
+
+
+def check_page(command):
+    try:
+        p = Page.objects.get(slug=command)
+    except Page.DoesNotExist:
+        return False
+    return p.text
 
 
 def bot_command_all(bot, message):
@@ -17,12 +36,9 @@ def bot_command_all(bot, message):
         if command == "/web":
             msg = u.reset_or_create_webuser_message()
         else:
-            try:
-                p = Page.objects.get(slug=command)
-                msg = p.text
-            except Page.DoesNotExist:
-                msg = "No entiendo el command '{}'".format(command)
-        print("mensaje='{}' reply='{}'".format(message.text.strip(), msg))
+            msg = check_place(command) or check_page(command) or \
+                "No entiendo el command '{}'".format(command)
+        print("mensaje='{}' reply='{}'".format(message.text.strip(), msg))  # [:40]))
         bot.send_message(u.ident, msg, parse_mode="Markdown")
     else:
         print("error", message)

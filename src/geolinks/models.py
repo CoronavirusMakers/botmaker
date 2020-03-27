@@ -1,6 +1,7 @@
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.template.loader import render_to_string
 from location_field.models.plain import PlainLocationField
 
 
@@ -27,6 +28,13 @@ class Place(models.Model):
     uris = models.IntegerField(default=0)
 
     objects = PlaceQuerySet.as_manager()
+
+    @property
+    def slugq(self):
+        return self.slug.replace("_", "\\_")
+
+    def content(self):
+        return render_to_string("geolinks/place_detail.md", {'object': self})
 
     def update_uris(self):
         self.uris = self.uri_set.count() + sum(Place.objects.filter(parent=self).values_list('uris', flat=True))
