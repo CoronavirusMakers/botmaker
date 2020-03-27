@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load pages_extras %}
+
+{% block title %}
+    {{ page.slug }}
+{% endblock %}
+
+{% block breadcrumb_block %}
+{% endblock %}
+
+{% block content %}
+	<h2>
+		{{ page.slug }}
+		{% if user.is_superuser %}
+		<a href="{% url 'admin:pages_page_change' page.id %}" title="edit">&#9998;</a>
+		{% endif %}
+	</h2>
+	<div>
+		{{ page.text|convert }}
+	</div>
+{% endblock %}

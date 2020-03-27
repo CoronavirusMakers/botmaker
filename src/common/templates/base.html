@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="{% static "common/style.css" %}" />
+    <link rel="stylesheet" href="{% static "common/cover.css" %}" />
+    {% load bootstrap4 %}
+    {% bootstrap_css %}
+    <title>{% block title %}---{% endblock %}</title>
+  </head>
+
+  <body class="bg-dark text-white">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        <header class="masthead mb-auto">
+            <div class="inner">
+                <h3 class="masthead-brand">Coronavirus Makers</h3>
+                <nav class="nav nav-masthead justify-content-center">
+                    <a class="nav-link active" href="{% url 'home' %}">Home</a>
+                    <a class="nav-link" href="{% url 'page_list' %}">Pages</a>
+                    <a class="nav-link" href="{% url 'geolinks_countries' %}">Countries</a>
+					{% if user.is_superuser %}
+                    <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+					{% endif %}
+					{% if user.is_authenticated %}
+                    <a class="nav-link" href="{% url 'admin:logout' %}">Logout</a>
+					{% else %}
+                    <a class="nav-link" href="{% url 'admin:login' %}">Login</a>
+					{% endif %}
+                </nav>
+            </div>
+        </header>
+        {% block breadcrumb_block %}
+        <div>
+            <ul class="nav nav-tabs">
+            {% block breadcrumb %}{% endblock %}
+            </ul>
+        </div>
+        {% endblock %}
+        <main role="main" class="inner cover">
+            {% block content %}{% endblock %}
+        </main>
+        <footer class="mastfoot mt-auto">
+            <div class="inner">
+                <p>Coronavirus Makers</p>
+            </div>
+        </footer>
+    </div>
+    {% bootstrap_javascript jquery='full' %}
+  </body>
+</html>

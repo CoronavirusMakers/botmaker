@@ -1,9 +1,18 @@
-<a href="{% url 'geolinks_countries' %}">world</a> &raquo;
-{% for parent in object.parents %}
-<a href="{% url 'geolinks_place' parent.slug %}">{{parent.name}}</a> &raquo;
-{% endfor %}
-{{object.name}}
+{% extends "base.html" %}
 
+{% block title %}
+{{object.name}}
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="nav-item"><a class="nav-link" href="{% url 'geolinks_countries' %}">world</a></li>
+{% for parent in object.parents %}
+<li class="nav-item"><a class="nav-link" href="{% url 'geolinks_place' parent.slug %}">{{parent.name}}</a></li>
+{% endfor %}
+<li class="nav-item"><a class="nav-link active disabled">{{object.name}}</a></li>
+{% endblock %}
+
+{% block content %}
 <h1>{{object.name}} ({{object.uris}})</h1>
 
 {% regroup object.place_set.all by subdivision as subdivisions %}
@@ -11,24 +20,21 @@
 {% for subdivision in subdivisions %}
 <h2>{{subdivision.grouper}}</h2>
 
-<ul>
+<div class="list-group">
 	{% for child in subdivision.list %}
-	<li>
-		<a href="{% url 'geolinks_place' child.slug %}">{{child.name}}</a> ({{child.uris}}):
-	</li>
+	<a class="list-group-item list-group-item-action flex-column align-items-start" href="{% url 'geolinks_place' child.slug %}">{{child.name}} ({{child.uris}})</a>
 	{% empty%}
-	<li>(no existen)</li>
+	<a class="list-group-item list-group-item-action flex-column align-items-start" href="">(no existen)</a> </a>
 	{% endfor %}
-</ul>
+</div>
 {% endfor %}
 
 <h2>Recursos</h2>
 
-<ul>
+<div class="list-group">
 	{% for uri in object.uri_set.all %}
-	<li>
-		<a href="{{uri.url}}">{{uri.title}}</a>: {{uri.description}}
-		{% if user.is_superuser %}<a href="{% url 'admin:geolinks_uri_change' uri.pk %}">admin</a>{% endif %}
-	</li>
+	<a class="list-group-item list-group-item-action flex-column align-items-start" href="{{uri.url}}">{{uri.title}}: {{uri.description}}</a>
+	{% if user.is_superuser %}<a href="{% url 'admin:geolinks_uri_change' uri.pk %}">(edit)</a>{% endif %}
 	{% endfor %}
-</ul>
+</div>
+{% endblock %}

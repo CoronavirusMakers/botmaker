@@ -1,15 +1,23 @@
-world
+{% extends "base.html" %}
 
-<h1>World</h1>
+{% block title %}
+World
+{% endblock %}
 
+{% block breadcrumb %}
+<li class="nav-item"><a class="nav-link active disabled">World</a></li>
+{% endblock %}
+
+{% block content %}
 {% regroup object_list by subdivision as subdivisions %}
 
 {% for subdivision in subdivisions %}
 <h2>{{subdivision.grouper}}</h2>
 
-<ul>
+<div class="list-group">
 	{% for country in subdivision.list %}
-	<li><a href="{% url 'geolinks_place' country.slug %}">{{country.name}}</a> ({{country.uris}})</li>
+	<a class="list-group-item list-group-item-action flex-column align-items-start" href="{% url 'geolinks_place' country.slug %}">{{country.name}} ({{country.uris}})</a>
 	{% endfor %}
-</ul>
+</div>
 {% endfor %}
+{% endblock %}
