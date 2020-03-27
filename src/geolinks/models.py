@@ -1,6 +1,7 @@
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from location_field.models.plain import PlainLocationField
 
 
 class PlaceQuerySet(models.QuerySet):
@@ -53,6 +54,7 @@ class Uri(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     url = models.URLField()
+    location = PlainLocationField(based_fields=['place'], zoom=7, blank=True, null=True)
     permanent = models.BooleanField(default=False, help_text="Iniciativa permanente o solo para el coronavirus")
     validated = models.BooleanField(default=False, help_text="Al validarse se hace visible")
 

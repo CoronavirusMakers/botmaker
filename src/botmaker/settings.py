@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'location_field',
     'common',
     'pages',
     'geolinks',
@@ -133,3 +134,9 @@ BASE_URL = config("BASE_URL", default="http://localhost:8000")
 
 # .bot
 TELEGRAM_TOKEN = config('TELEGRAM_TOKEN')
+
+# django-location-field
+LOCATION_FIELD = {
+    'map.provider': 'openstreetmap',
+    'provider.openstreetmap.max_zoom': 18,
+}
