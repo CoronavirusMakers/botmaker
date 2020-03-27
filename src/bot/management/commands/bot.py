@@ -40,7 +40,7 @@ def bot_command_all(bot, message):
         else:
             msg = check_place(command) or check_page(command) or \
                 "No entiendo el command '{}'".format(command)
-        print("mensaje='{}' reply='{}'".format(message.text.strip(), msg))  # [:40]))
+        print("user='{}' mensaje='{}' reply='{}'".format(u, message.text.strip(), repr(msg[:40])))
         bot.send_message(u.ident, msg, parse_mode="Markdown")
     else:
         print("error", message)
