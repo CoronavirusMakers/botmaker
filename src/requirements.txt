@@ -4,3 +4,4 @@ gunicorn
 pyTelegramBotAPI
 python-decouple==3.1
 django-bootstrap4
+pycountry

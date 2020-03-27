@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'estatico',
+    'geolinks',
     'bot',
     'bootstrap4',
 ]
@@ -124,4 +125,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# .bot
 TELEGRAM_TOKEN = config('TELEGRAM_TOKEN')

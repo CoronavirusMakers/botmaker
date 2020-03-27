@@ -1,18 +1,32 @@
 # Plataforma web-bot para makers
 
-## Instalacion
+## Instalación
 
-Ejecuta `./manage.sh` y te creará el .virtualenv y más cosas.
+### BOT
 
-Escribe un fichero environment con esto:
-```
-export SECRET_KEY='una_string_complicada'
-export TELEGRAM_TOKEN="uid:hash_que_te_dice_botfather"
-```
-
-También puedes crear un archivo .env dentro de `src/` con esto:
+Hablate con @botfather y crea un nuevo bot, dale nombre, y guarda la HTTP API key en el fichero `.env` de esta forma:
 
 ```
-SECRET_KEY='una_string_complicada'
-TELEGRAM_TOKEN='uid:hash_que_te_dice_botfather'
+TELEGRAM_TOKEN = "uid:hash_que_te_dice_botfather"
 ```
+
+### Django
+
+Ejecuta `./manage.sh` y te creará el `.virtualenv` y más cosas.
+
+Ejecuta `./manage.sh changepassword admin` para definir la contraseña del usuario `admin`.
+
+Escribe en el fichero `.env` lo siguiente:
+```
+SECRET_KEY = 'una_string_complicada'
+```
+
+## Ejecución
+
+Para cargar el virtualenv ejecuta `. .virtualenv/bin/activate`
+
+Para el django ejecuta `./manage.py runserver`
+
+Para el bot ejecuta `./manage.py bot`
+
+Visita http://localhost:8000/admin/

@@ -1,0 +1,11 @@
+world
+
+<h1>World</h1>
+
+<h2>Hijos</h2>
+
+<ul>
+	{% for country in object_list %}
+	<li><a href="{% url 'geolinks_place' country.slug %}">{{country.name}}</a> ({{country.uris}})</li>
+	{% endfor %}
+</ul>

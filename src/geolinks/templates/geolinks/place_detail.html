@@ -1,0 +1,30 @@
+<a href="{% url 'geolinks_countries' %}">world</a> &raquo;
+{% for parent in object.parents %}
+<a href="{% url 'geolinks_place' parent.slug %}">{{parent.name}}</a> &raquo;
+{% endfor %}
+{{object.name}}
+
+<h1>{{object.name}} ({{object.uris}})</h1>
+
+<h2>Hijos</h2>
+
+<ul>
+	{% for child in object.place_set.all %}
+	<li>
+		<a href="{% url 'geolinks_place' child.slug %}">{{child.name}}</a> ({{child.uris}}):
+	</li>
+	{% empty%}
+	<li>(no existen)</li>
+	{% endfor %}
+</ul>
+
+<h2>Recursos</h2>
+
+<ul>
+	{% for uri in object.uri_set.all %}
+	<li>
+		<a href="{{uri.url}}">{{uri.title}}</a>: {{uri.description}}
+		{% if user.is_superuser %}<a href="{% url 'admin:geolinks_uri_change' uri.pk %}">admin</a>{% endif %}
+	</li>
+	{% endfor %}
+</ul>
