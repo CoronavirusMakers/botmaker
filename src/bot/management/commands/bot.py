@@ -14,13 +14,16 @@ def bot_command_all(bot, message):
         print("contact='{}'".format(message.contact.phone_number))
     elif message.content_type == "text":
         comando = message.text.strip()
-        try:
-            p = Pagina.objects.get(slug=comando)
-            msg = p.texto
-        except Pagina.DoesNotExist:
-            msg = "No entiendo el comando '{}'".format(comando)
+        if comando == "/web":
+            msg = u.reset_or_create_webuser_message()
+        else:
+            try:
+                p = Pagina.objects.get(slug=comando)
+                msg = p.texto
+            except Pagina.DoesNotExist:
+                msg = "No entiendo el comando '{}'".format(comando)
         print("mensaje='{}' reply='{}'".format(message.text.strip(), msg))
-        bot.send_message(u.ident, msg)
+        bot.send_message(u.ident, msg, parse_mode="Markdown")
     else:
         print("error", message)
 

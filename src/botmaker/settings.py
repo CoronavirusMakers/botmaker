@@ -128,6 +128,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = config('STATIC_URL', default='/static/')
+BASE_URL = config("BASE_URL", default="http://localhost:8000")
 
 # .bot
 TELEGRAM_TOKEN = config('TELEGRAM_TOKEN')
