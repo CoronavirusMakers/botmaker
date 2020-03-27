@@ -16,7 +16,7 @@ from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = config('STATIC_ROOT', default=os.path.join(BASE_DIR, 'static'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -25,9 +25,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=lambda x: x.split(":"))
 
 # Application definition
 
@@ -81,8 +81,12 @@ WSGI_APPLICATION = 'botmaker.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': config('DATABASE_ENGINE', default='django.db.backends.sqlite3'),
+        'NAME': config('DATABASE_NAME', default=os.path.join(BASE_DIR, 'db.sqlite3')),
+	'USER': config('DATABASE_USER', default=None),
+	'PASSWORD': config('DATABASE_PASSWORD', default=None),
+	'HOST': config('DATABASE_HOST', default=None),
+	'PORT': config('DATABASE_PORT', default=None),
     }
 }
 
@@ -109,9 +113,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'es-es'
+LANGUAGE_CODE = config('LANGUAGE_CODE', default='es-es')
 
-TIME_ZONE = 'Atlantic/Canary'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -123,7 +127,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = config('STATIC_URL', default='/static/')
 
 # .bot
 TELEGRAM_TOKEN = config('TELEGRAM_TOKEN')
