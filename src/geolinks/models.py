@@ -48,6 +48,16 @@ class Uri(models.Model):
     permanent = models.BooleanField(default=False, help_text="Iniciativa permanente o solo para el coronavirus")
     validated = models.BooleanField(default=False, help_text="Al validarse se hace visible")
 
+    @property
+    def summary(self, n=60):
+        if len(self.description) > n:
+            return self.description[:n] + "..."
+        else:
+            return self.description
+
+    def __str__(self):
+        return "{} ({})".format(self.title, self.place)
+
 
 @receiver(post_save, sender=Uri)
 def postsave_uri(sender, instance, raw, *args, **kwargs):

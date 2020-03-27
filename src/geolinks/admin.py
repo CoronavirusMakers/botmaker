@@ -11,6 +11,6 @@ class PlaceAdmin(admin.ModelAdmin):
 
 @admin.register(models.Uri)
 class UriAdmin(admin.ModelAdmin):
-    list_display = ('place', 'url')
+    list_display = ('title', 'url', 'summary', 'place')
     autocomplete_fields = ('place', )
     list_filter = ('permanent', 'validated')
