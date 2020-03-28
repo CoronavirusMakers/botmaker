@@ -19,4 +19,3 @@ class SubdivisionAdmin(admin.ModelAdmin):
 class UriAdmin(admin.ModelAdmin):
     list_display = ('title', 'url', 'summary', 'place')
     autocomplete_fields = ('place', )
-    list_filter = ('permanent', 'validated')

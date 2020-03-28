@@ -67,8 +67,6 @@ class Uri(models.Model):
     description = models.TextField(blank=True, null=True)
     url = models.URLField()
     location = PlainLocationField(based_fields=['place'], zoom=7, blank=True, null=True)
-    permanent = models.BooleanField(default=False, help_text="Iniciativa permanente o solo para el coronavirus")
-    validated = models.BooleanField(default=False, help_text="Al validarse se hace visible")
 
     @property
     def summary(self, n=60):
