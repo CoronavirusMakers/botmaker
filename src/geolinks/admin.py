@@ -20,3 +20,4 @@ class UriAdmin(admin.ModelAdmin):
     list_display = ('title', 'url', 'summary', 'place')
     autocomplete_fields = ('place', )
     search_fields = ('title', 'url', 'description')
+    save_on_top = True
