@@ -19,7 +19,6 @@ class TelegramUser(models.Model):
     last_name = models.CharField(max_length=255, blank=True, null=True)
     is_bot = models.BooleanField()
     language_code = models.CharField(max_length=255, blank=True, null=True)
-    web_enabled = models.BooleanField(default=False)
     web_group = models.ForeignKey(Group, on_delete=models.SET_NULL, blank=True, null=True)
 
     def reset_or_create_webuser_message(self):
@@ -28,17 +27,18 @@ class TelegramUser(models.Model):
             'last_name': self.last_name or "-",
             'is_active': True,
         }
-        if not self.web_enabled or not self.web_group or not self.username:
-            return "Lo siento, no tienes acceso a la web."
+        if not self.web_group:
+            return "Lo siento, para tener acceso a la web necesitas que un administrador te autorice"
+        if not self.username:
+            return "Lo siento, para tener acceso a la web necesitas tener un 'telegram nick'"
         u, created = User.objects.get_or_create(username=self.username, defaults=defaults_dict)
         password = generate_password()
         u.set_password(password)
+        u.is_staff = True
         u.save()
-        if self.web_group:
-            if self.web_group not in u.groups.all():
-                u.groups.add(self.web_group)
-            u.is_staff = True
-            u.save()
+        if self.web_group not in u.groups.all():
+            u.groups.add(self.web_group)
+        u.save()
         # FIXME esto se podría pasar a templates/webuser.txt para poderlo maquetar al gusto
         return "Tienes acceso a {} con usuario '{}' y contraseña '{}'".format(settings.BASE_URL,
                                                                               u.username, password)
