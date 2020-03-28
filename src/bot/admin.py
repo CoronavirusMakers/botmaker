@@ -8,3 +8,4 @@ class TelegramUserAdmin(admin.ModelAdmin):
     list_display = ('ident', 'username', 'first_name', 'last_name', 'creation_date', 'web_enabled')
     readonly_fields = ('creation_date', )
     list_filter = ('web_enabled', )
+    search_fields = ('username', 'first_name', 'last_name')
