@@ -64,8 +64,8 @@ class Place(models.Model):
 class Uri(models.Model):
     place = models.ForeignKey(Place, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
     url = models.URLField()
+    description = models.TextField(blank=True, null=True)
     location = PlainLocationField(based_fields=['place'], zoom=7, blank=True, null=True)
 
     @property
