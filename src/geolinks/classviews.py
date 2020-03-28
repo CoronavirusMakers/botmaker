@@ -11,3 +11,14 @@ class CountriesView(generic.ListView):
 
 class PlaceView(generic.DetailView):
     model = models.Place
+
+
+class LocationsView(generic.ListView):
+    model = models.Location
+
+    def get_queryset(self):
+        return super().get_queryset().countries().with_uris()
+
+
+class LocationView(generic.DetailView):
+    model = models.Location

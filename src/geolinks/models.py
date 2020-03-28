@@ -20,15 +20,7 @@ class Subdivision(models.Model):
         return self.name
 
 
-class Place(models.Model):
-    slug = models.SlugField(max_length=10, unique=True)
-    name = models.CharField(max_length=255)
-    subdivision = models.ForeignKey(Subdivision, on_delete=models.CASCADE)
-    parent = models.ForeignKey('geolinks.Place', on_delete=models.CASCADE, blank=True, null=True)
-    uris = models.IntegerField(default=0)
-
-    objects = PlaceQuerySet.as_manager()
-
+class Base(models.Model):
     @property
     def slugq(self):
         return self.slug.replace("_", "\\_")
@@ -36,12 +28,12 @@ class Place(models.Model):
     def content(self):
         return render_to_string("geolinks/place_detail.md", {'object': self})
 
-    @staticmethod
-    def all_content():
-        return render_to_string("geolinks/place_list.md", {'object_list': Place.objects.countries().with_uris()})
+    @classmethod
+    def all_content(klz):
+        return render_to_string("geolinks/place_list.md", {'object_list': klz.objects.countries().with_uris()})
 
     def update_uris(self):
-        self.uris = self.uri_set.count() + sum(Place.objects.filter(parent=self).values_list('uris', flat=True))
+        self.uris = self.uri_set.count() + sum(type(self).objects.filter(parent=self).values_list('uris', flat=True))
         self.save()
         if self.parent:
             self.parent.update_uris()
@@ -51,6 +43,39 @@ class Place(models.Model):
             return self.parent.parents() + [self.parent]
         else:
             return []
+
+    class Meta:
+        abstract = True
+
+
+class Location(Base):
+    slug = models.SlugField(max_length=10, unique=True, blank=True, null=True)
+    geonameid = models.IntegerField(unique=True)
+    name = models.CharField(max_length=255)
+    parent = models.ForeignKey('geolinks.Location', on_delete=models.CASCADE, blank=True, null=True)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+    uris = models.IntegerField(default=0)
+
+    objects = PlaceQuerySet.as_manager()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ('name', )
+        verbose_name = "localización"
+        verbose_name_plural = "localizaciones"
+
+
+class Place(Base):
+    slug = models.SlugField(max_length=10, unique=True)
+    name = models.CharField(max_length=255)
+    subdivision = models.ForeignKey(Subdivision, on_delete=models.CASCADE)
+    parent = models.ForeignKey('geolinks.Place', on_delete=models.CASCADE, blank=True, null=True)
+    uris = models.IntegerField(default=0)
+
+    objects = PlaceQuerySet.as_manager()
 
     def __str__(self):
         return "{} ({})".format(self.name, self.slug)
@@ -62,7 +87,8 @@ class Place(models.Model):
 
 
 class Uri(models.Model):
-    place = models.ForeignKey(Place, on_delete=models.CASCADE)
+    place = models.ForeignKey(Place, on_delete=models.SET_NULL, blank=True, null=True)
+    place2 = models.ForeignKey(Location, on_delete=models.SET_NULL, blank=True, null=True)
     title = models.CharField(max_length=255)
     url = models.URLField(unique=True)
     description = models.TextField(blank=True, null=True)
@@ -85,3 +111,4 @@ class Uri(models.Model):
 def postsave_uri(sender, instance, raw, *args, **kwargs):
     if not raw:
         instance.place.update_uris()
+        instance.place2.update_uris()

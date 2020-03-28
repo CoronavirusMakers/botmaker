@@ -9,6 +9,13 @@ class PlaceAdmin(admin.ModelAdmin):
     list_display = ('slug', 'name')
 
 
+@admin.register(models.Location)
+class LocationAdmin(admin.ModelAdmin):
+    autocomplete_fields = ('parent', )
+    search_fields = ('slug', 'name')
+    list_display = ('slug', 'name')
+
+
 @admin.register(models.Subdivision)
 class SubdivisionAdmin(admin.ModelAdmin):
     search_fields = ('name', )
@@ -17,7 +24,7 @@ class SubdivisionAdmin(admin.ModelAdmin):
 
 @admin.register(models.Uri)
 class UriAdmin(admin.ModelAdmin):
-    list_display = ('title', 'url', 'summary', 'place')
-    autocomplete_fields = ('place', )
+    list_display = ('title', 'url', 'summary', 'place', 'place2')
+    autocomplete_fields = ('place', 'place2')
     search_fields = ('title', 'url', 'description')
     save_on_top = True
