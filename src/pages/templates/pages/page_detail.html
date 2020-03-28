@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "common/base.html" %}
 {% load pages_extras %}
 
 {% block title %}
@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block menu %}
-{% include "_menu.html" with class_pages="active" %}
+{% include "common/_menu.html" with class_pages="active" %}
 {% endblock menu %}
 
 {% block content %}
