@@ -1,5 +1,5 @@
 {% extends "common/base.html" %}
-{% load pages_extras %}
+{% load botmaker %}
 
 {% block title %}
     {{ page.slug }}
@@ -20,6 +20,6 @@
 		{% endif %}
 	</h2>
 	<div>
-		{{ page.text|convert|linebreaks}}
+		{{ page.text|convert_slash_to_pages|linebreaks}}
 	</div>
 {% endblock %}

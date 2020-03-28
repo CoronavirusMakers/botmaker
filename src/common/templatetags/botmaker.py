@@ -8,6 +8,6 @@ register = template.Library()
 
 @register.filter
 @stringfilter
-def convert(s):
+def convert_slash_to_pages(s):
     out = re.sub(r'(\/\w+)', r'<a href="/pages\1">\1</a>', s)
     return mark_safe(out)
