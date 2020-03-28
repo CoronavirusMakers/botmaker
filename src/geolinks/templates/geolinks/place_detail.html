@@ -12,6 +12,10 @@
 <li class="nav-item"><a class="nav-link active disabled">{{object.name}}</a></li>
 {% endblock %}
 
+{% block menu %}
+{% include "_menu.html" with class_countries="active" %}
+{% endblock menu %}
+
 {% block content %}
 <h1>{{object.name}} ({{object.uris}})</h1>
 

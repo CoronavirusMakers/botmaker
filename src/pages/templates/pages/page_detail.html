@@ -8,6 +8,10 @@
 {% block breadcrumb_block %}
 {% endblock %}
 
+{% block menu %}
+{% include "_menu.html" with class_pages="active" %}
+{% endblock menu %}
+
 {% block content %}
 	<h2>
 		{{ page.slug }}

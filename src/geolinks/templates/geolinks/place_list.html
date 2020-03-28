@@ -8,6 +8,10 @@ World
 <li class="nav-item"><a class="nav-link active disabled">World</a></li>
 {% endblock %}
 
+{% block menu %}
+{% include "_menu.html" with class_countries="active" %}
+{% endblock menu %}
+
 {% block content %}
 {% regroup object_list by subdivision as subdivisions %}
 
