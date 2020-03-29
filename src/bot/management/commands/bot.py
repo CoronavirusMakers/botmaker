@@ -68,7 +68,7 @@ class Command(BaseCommand):
                 return bot_command_all(bot, message)
             except Exception as e:
                 self.stdout.write(self.style.ERROR("Algo se ha roto :("))
-                self.stderr.write(e)
+                self.stderr.write(str(e))
 
         print("main loop polling...")
         bot.polling()
