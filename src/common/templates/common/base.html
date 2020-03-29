@@ -3,41 +3,45 @@
 <html lang="en">
   <head>
     <link rel="stylesheet" href="{% static "common/style.css" %}" />
-    <link rel="stylesheet" href="{% static "common/cover.css" %}" />
     {% load bootstrap4 %}
     {% bootstrap_css %}
     <title>{% block title %}---{% endblock %}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
 
   <body class="bg-dark text-white">
-    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-        <header class="masthead mb-auto">
-            <div class="inner">
-                <div class="masthead-brand w-50">
-                    <img class="w-100" src="{% static "common/img/logo.png" %}" alt="Coronavirus Makers" />
-                </div>
-                <nav class="nav nav-masthead justify-content-center mt-4">
+    <div class="container-fluid">
+        <div class="row justify-content-md-center">
+            <div class="col-sm-12 col-md-12 col-lg-6">
+                <header class="mb-auto">
                     {% block menu %}
                     {% include "common/_menu.html" %}
                     {% endblock menu %}
-                </nav>
+                </header>
+                {% block breadcrumb_block %}{% endblock %}
             </div>
-        </header>
-        {% block breadcrumb_block %}
-        <div>
-            <ul class="nav nav-tabs">
-            {% block breadcrumb %}{% endblock %}
-            </ul>
         </div>
-        {% endblock %}
-        <main role="main" class="inner cover">
-            {% block content %}{% endblock %}
-        </main>
-        <footer class="mastfoot mt-auto">
-            <div class="inner">
-                <p>Coronavirus Makers</p>
+        <div class="row justify-content-md-center">
+            <div class="mt-5 col-sm-12 col-md-12 col-lg-6">
+                <div>
+                    <ul class="nav nav-tabs">
+                        {% block breadcrumb %}{% endblock %}
+                    </ul>
+                </div>
+                {% block content %}{% endblock %}
             </div>
-        </footer>
+        </div>
+        <div class="row mt-5 text-center">
+            <div class="col-12">
+                <footer class="mt-auto fixed-bottom">
+                    <div class="inner">
+                        <p>Coronavirus Makers</p>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
     </div>
     {% bootstrap_javascript jquery='full' %}
   </body>
