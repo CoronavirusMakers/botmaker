@@ -6,5 +6,5 @@
 /{{child.slug|quote_telegram}} {{child.title}} ({{child.uris}}){% endfor %}{% endif %}
 
 {% endfor %}{% if object.uri_set.exists %}{{object.uri_set.count}} recursos disponibles:
-{% for uri in object.uri_set.all %}- [{{uri.title}}]({{uri.url}}) {{uri.description}}
+{% for uri in object.uri_set.all %}- [{{uri.title}}]({{uri.url}}) {{uri.text}}
 {% endfor %}{% endif %}
