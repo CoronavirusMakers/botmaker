@@ -7,6 +7,7 @@ from bot.models import TelegramUser
 from pages.models import Page
 from geolinks.models import Place
 
+
 def check_place(command):
     if not command.startswith("/"):
         return False
@@ -28,9 +29,11 @@ def check_page(command):
 def bot_command_all(bot, message):
     u = TelegramUser.get_or_update(message.from_user)
     if message.content_type == "location":
-        print("latitude='{}' longitude='{}'".format(message.location.latitude, message.location.longitude))
+        print(
+            f"latitude='{message.location.latitude}' longitude='{message.location.longitude}'"
+        )
     elif message.content_type == "contact":
-        print("contact='{}'".format(message.contact.phone_number))
+        print(f"contact='{message.contact.phone_number}'")
     elif message.content_type == "text":
         command = message.text.strip()
         if command == "/web":
@@ -40,9 +43,10 @@ def bot_command_all(bot, message):
         else:
             msg = check_place(command) or check_page(command) or \
                 "No entiendo el command '{}'".format(command)
-        print("{} user='{}' mensaje={} reply={}".format(
-            datetime.datetime.now().time(), 
-            u.nick, repr(message.text.strip()), repr(msg[:40])))
+        print(
+            f"{datetime.datetime.now().time()} user='{u.nick}' mensaje={repr(message.text.strip())} reply={repr(msg[:40])}"
+        )
+
         bot.send_message(u.ident, msg, parse_mode="Markdown")
     else:
         print("error", message)
@@ -55,9 +59,16 @@ class Command(BaseCommand):
 
         bot = telebot.TeleBot(settings.TELEGRAM_TOKEN)
 
-        @bot.message_handler(func=lambda message: True, content_types=["text", "location", "contact"])
+        @bot.message_handler(
+            func=lambda message: True,
+            content_types=["text", "location", "contact"],
+        )
         def command_all(message):
-            return bot_command_all(bot, message)
+            try:
+                return bot_command_all(bot, message)
+            except Exception as e:
+                self.stdout.write(self.style.ERROR("Algo se ha roto :("))
+                self.stderr.write(e)
 
         print("main loop polling...")
         bot.polling()
