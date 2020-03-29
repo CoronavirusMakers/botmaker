@@ -25,6 +25,7 @@ class TelegramUser(models.Model):
         blank=True,
         null=True,
     )
+    receive_unknown = models.BooleanField(default=False)
 
     def reset_or_create_webuser_message(self):
         defaults_dict = {

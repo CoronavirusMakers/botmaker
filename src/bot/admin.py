@@ -7,5 +7,5 @@ class TelegramUserAdmin(admin.ModelAdmin):
     date_hierarchy = 'creation_date'
     list_display = ('ident', 'username', 'first_name', 'last_name', 'creation_date', 'web_group')
     readonly_fields = ('creation_date', )
-    list_filter = ('web_group', )
+    list_filter = ('web_group', 'receive_unknown')
     search_fields = ('username', 'first_name', 'last_name')
