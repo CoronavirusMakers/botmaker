@@ -1,11 +1,7 @@
 {% load static %}
 
-
-
-
-
 <div class="navbar navbar-expand-lg navbar-dark text-white">
-    <a class="navbar-brand w-50" href="#"><img class="w-100" src="{% static "common/img/logo.png" %}"
+    <a class="navbar-brand w-50" href="{% url 'node_list' %}"><img class="w-100" src="{% static "common/img/logo.png" %}"
             alt="Coronavirus Makers" /></a>
     <button class="navbar-toggler bg-dark text-white" type="button" data-toggle="collapse" data-target="#navbar-covid-toggle"
         aria-controls="navbar-covid-toggle" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,14 +10,11 @@
     <div class="collapse navbar-collapse" id="navbar-covid-toggle">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0 text-white">
             <li class="nav-item">
-                <a class="nav-link {{class_home}}" href="{% url 'home' %}">Home</a>
+                <a class="nav-link {{class_home}}" href="{% url 'node_list' %}">Home</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link {{class_pages}}" href="{% url 'page_list' %}">Pages</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{class_countries}}" href="{% url 'geolinks_countries' %}">Countries</a>
-            </li>
+            {% for parent in object.parents %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'node_slug' parent.slug %}">{{parent.title|truncatechars:8}}</a></li>
+            {% endfor %}
             {% if user.is_superuser %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>

@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 # yapf: disable
 
 import os
-from decouple import config #, Csv
+from decouple import config, Csv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,9 +27,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default="", cast=lambda x: [x for x in x.split(":") if x])
-# Método para convertir ALLOWED_HOSTS=host1, host2 en ['host1', 'host2']
-# ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 # Application definition
 
@@ -43,8 +41,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'location_field',
     'common',
-    'pages',
-    'geolinks',
+    'nodes',
     'bot',
     'bootstrap4',
 ]
@@ -140,5 +137,6 @@ TELEGRAM_TOKEN = config('TELEGRAM_TOKEN')
 # django-location-field
 LOCATION_FIELD = {
     'map.provider': 'openstreetmap',
+    'map.zoom': 4,
     'provider.openstreetmap.max_zoom': 18,
 }

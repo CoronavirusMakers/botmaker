@@ -1,0 +1,57 @@
+{% extends "common/base.html" %}
+{% load botmaker %}
+
+{% block title %}
+    {{object.title}}
+{% endblock %}
+
+{% block menu %}
+{% include "common/_menu.html" with class_nodes="active" %}
+{% endblock menu %}
+
+{% block breadcrumbx %}
+<li class="nav-item"><a class="nav-link" href="{% url 'node_list' %}">/</a></li>
+{% for parent in object.parents %}
+<li class="nav-item"><a class="nav-link" href="{% url 'node_slug' parent.slug %}">{{parent.title}}</a></li>
+{% endfor %}
+<li class="nav-item"><a class="nav-link active disabled">{{object.title}}</a></li>
+{% if user.is_superuser %}<li class="nav-item"><a class="nav-link" href="{% url 'admin:nodes_node_change' object.pk %}">&#9998;</a></li>{% endif %}
+{% endblock %}
+
+{% block content %}
+<h1>
+	{{object.title}}
+	{% if user.is_superuser %}<a href="{% url 'admin:nodes_node_change' object.pk %}">&#9998;</a>{% endif %}
+</h1>
+
+{% if object.text %}
+<div>
+	{{ object.text|convert_slash_to_nodes|convert_markdown|linebreaks}}
+</div>
+{% endif %}
+
+{% regroup object.node_set.with_data.all by subdivision as subdivisions %}
+
+{% for subdivision in subdivisions %}
+<h4>By {{subdivision.grouper}}</h4>
+
+<div class="list-group">
+	{% for child in subdivision.list %}
+	<a class="list-group-item list-group-item-action flex-column align-items-start" href="{% url 'node_slug' child.slug %}">{{child.title}} ({{child.uris}})</a>
+	{% if user.is_superuser %}<div class="float-right"><a href="{% url 'admin:nodes_node_change' child.pk %}">&#9998;</a></div>{% endif %}
+	{% empty%}
+	<a class="list-group-item list-group-item-action flex-column align-items-start" href="">(no existen)</a> </a>
+	{% endfor %}
+</div>
+{% endfor %}
+
+{% if object.uri_set.exists %} 
+<h4>Resources</h4>
+<div class="list-group">
+	{% for uri in object.uri_set.all %}
+	<a class="list-group-item list-group-item-action flex-column align-items-start" href="{{uri.url}}">{{uri.title}}{% if uri.text %}: {{uri.text}}{% endif %}</a>
+	{% if user.is_superuser %}<a href="{% url 'admin:nodes_uri_change' uri.pk %}">&#9998;</a>{% endif %}
+	{% endfor %}
+</div>
+{% endif %}
+{% endblock %}

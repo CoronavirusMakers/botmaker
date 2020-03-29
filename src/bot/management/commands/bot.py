@@ -4,26 +4,17 @@ import datetime
 from django.core.management.base import BaseCommand  # , CommandError
 from django.conf import settings
 from bot.models import TelegramUser
-from pages.models import Page
-from geolinks.models import Place
+from nodes.models import Node
 
 
-def check_place(command):
+def check_node(command):
     if not command.startswith("/"):
         return False
     try:
-        place = Place.objects.get(slug=command[1:])
-    except Place.DoesNotExist:
+        node = Node.objects.get(slug=command[1:])
+    except Node.DoesNotExist:
         return False
-    return place.content()
-
-
-def check_page(command):
-    try:
-        p = Page.objects.get(slug=command)
-    except Page.DoesNotExist:
-        return False
-    return p.text
+    return node.content()
 
 
 def bot_command_all(bot, message):
@@ -38,10 +29,8 @@ def bot_command_all(bot, message):
         command = message.text.strip()
         if command == "/web":
             msg = u.reset_or_create_webuser_message()
-        elif command == "/world":
-            msg = Place.all_content()
         else:
-            msg = check_place(command) or check_page(command) or \
+            msg = check_node(command) or \
                 "No entiendo el command '{}'".format(command)
         print(
             f"{datetime.datetime.now().time()} user='{u.nick}' mensaje={repr(message.text.strip())} reply={repr(msg[:40])}"
@@ -49,7 +38,7 @@ def bot_command_all(bot, message):
 
         bot.send_message(u.ident, msg, parse_mode="Markdown")
     else:
-        print("error", message)
+        print(f"error {message}")
 
 
 class Command(BaseCommand):

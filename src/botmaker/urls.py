@@ -16,12 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.conf.urls import include
 from django.urls import path
-from django.views.generic import TemplateView
 
 
 urlpatterns = [
-    path('pages', include('pages.urls')),  # missing trailing / because slugs have /
-    path('world/', include('geolinks.urls')),
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name="common/home.html"), name="home"),
+    path('', include('nodes.urls')),
 ]

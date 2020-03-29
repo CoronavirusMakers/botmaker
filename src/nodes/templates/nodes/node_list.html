@@ -4,7 +4,8 @@
     Listado de páginas
 {% endblock %}
 
-{% block breadcrumb_block %}
+{% block breadcrumb %}
+<li class="nav-item"><a class="nav-link active disabled" href="{% url 'node_list' %}">/</a></li>
 {% endblock %}
 
 {% block menu %}
@@ -12,10 +13,9 @@
 {% endblock menu %}
 
 {% block content %}
-    <h2>/</h2>
     <div class="list-group">
-        {% for page in object_list %}
-        <a class="list-group-item list-group-item-action flex-column align-items-start" href="{% url 'page_slug' slug=page.slug %}">{{ page.slug }}</a>
+        {% for node in object_list %}
+        <a class="list-group-item list-group-item-action flex-column align-items-start" href="{% url 'node_slug' slug=node.slug %}">{{ node.title}} (/{{node.slug}})</a>
         {% empty %}
         <a class="list-group-item list-group-item-action flex-column align-items-start" href="">Sin páginas aún</a>
         {% endfor %}
