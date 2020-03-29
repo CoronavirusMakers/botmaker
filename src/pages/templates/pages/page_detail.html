@@ -13,13 +13,13 @@
 {% endblock menu %}
 
 {% block content %}
-	<h2>
-		{{ page.slug }}
-		{% if user.is_superuser %}
-		<a href="{% url 'admin:pages_page_change' page.id %}" title="edit">&#9998;</a>
-		{% endif %}
-	</h2>
-	<div>
-		{{ page.text|convert_slash_to_pages|convert_markdown|linebreaks}}
-	</div>
+    <h2>
+        {{ page.slug }}
+        {% if user.is_superuser %}
+        <a href="{% url 'admin:pages_page_change' page.id %}" title="edit">&#9998;</a>
+        {% endif %}
+    </h2>
+    <div>
+        {{ page.text|convert_slash_to_pages|convert_markdown|linebreaks}}
+    </div>
 {% endblock %}

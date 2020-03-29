@@ -19,7 +19,12 @@ class TelegramUser(models.Model):
     last_name = models.CharField(max_length=255, blank=True, null=True)
     is_bot = models.BooleanField()
     language_code = models.CharField(max_length=255, blank=True, null=True)
-    web_group = models.ForeignKey(Group, on_delete=models.SET_NULL, blank=True, null=True)
+    web_group = models.ForeignKey(
+        Group,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+    )
 
     def reset_or_create_webuser_message(self):
         defaults_dict = {
@@ -31,7 +36,10 @@ class TelegramUser(models.Model):
             return "Lo siento, para tener acceso a la web necesitas que un administrador te autorice"
         if not self.username:
             return "Lo siento, para tener acceso a la web necesitas tener un 'telegram nick'"
-        u, created = User.objects.get_or_create(username=self.username, defaults=defaults_dict)
+        u, created = User.objects.get_or_create(
+            username=self.username,
+            defaults=defaults_dict,
+        )
         password = generate_password()
         u.set_password(password)
         u.is_staff = True
@@ -40,8 +48,11 @@ class TelegramUser(models.Model):
             u.groups.add(self.web_group)
         u.save()
         # FIXME esto se podría pasar a templates/webuser.txt para poderlo maquetar al gusto
-        return "Tienes acceso a {} con usuario '{}' y contraseña '{}'".format(settings.BASE_URL,
-                                                                              u.username, password)
+        return "Tienes acceso a {} con usuario '{}' y contraseña '{}'".format(
+            settings.BASE_URL,
+            u.username,
+            password,
+        )
 
     @staticmethod
     def get_or_update(defaults):
@@ -52,12 +63,16 @@ class TelegramUser(models.Model):
             'is_bot': defaults.is_bot,
             'language_code': defaults.language_code,
         }
-        t, created = TelegramUser.objects.get_or_create(ident=defaults.id, defaults=defaults_dict)
+        t, created = TelegramUser.objects.get_or_create(
+            ident=defaults.id,
+            defaults=defaults_dict,
+        )
         if not created:
             changed = False
             for key, value in defaults_dict.items():
                 if getattr(t, key) != value:
-                    print("Valor", key, "cambiado de", getattr(t, key), "a", value)
+                    print("Valor", key, "cambiado de", getattr(t, key), "a",
+                          value)
                     setattr(t, key, value)
                     changed = True
             if changed:
@@ -71,8 +86,8 @@ class TelegramUser(models.Model):
     def nick(self):
         if self.username:
             return "@" + self.username
-        else:
-            return "#" + str(self.ident)
+        return "#" + str(self.ident)
 
     def __str__(self):
-        return "{} {} ({})".format(self.first_name, self.last_name or "", self.nick)
+        return "{} {} ({})".format(self.first_name, self.last_name or "",
+                                   self.nick)

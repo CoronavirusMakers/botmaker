@@ -24,7 +24,12 @@ class Place(models.Model):
     slug = models.SlugField(max_length=10, unique=True)
     name = models.CharField(max_length=255)
     subdivision = models.ForeignKey(Subdivision, on_delete=models.CASCADE)
-    parent = models.ForeignKey('geolinks.Place', on_delete=models.CASCADE, blank=True, null=True)
+    parent = models.ForeignKey(
+        'geolinks.Place',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
     uris = models.IntegerField(default=0)
 
     objects = PlaceQuerySet.as_manager()
@@ -38,10 +43,14 @@ class Place(models.Model):
 
     @staticmethod
     def all_content():
-        return render_to_string("geolinks/place_list.md", {'object_list': Place.objects.countries().with_uris()})
+        return render_to_string(
+            "geolinks/place_list.md",
+            {'object_list': Place.objects.countries().with_uris()},
+        )
 
     def update_uris(self):
-        self.uris = self.uri_set.count() + sum(Place.objects.filter(parent=self).values_list('uris', flat=True))
+        self.uris = self.uri_set.count() + sum(
+            Place.objects.filter(parent=self).values_list('uris', flat=True))
         self.save()
         if self.parent:
             self.parent.update_uris()
@@ -49,14 +58,16 @@ class Place(models.Model):
     def parents(self):
         if self.parent:
             return self.parent.parents() + [self.parent]
-        else:
-            return []
+        return []
 
     def __str__(self):
         return "{} ({})".format(self.name, self.slug)
 
     class Meta:
-        ordering = ('subdivision', 'name', )
+        ordering = (
+            'subdivision',
+            'name',
+        )
         verbose_name = "lugar"
         verbose_name_plural = "lugares"
 
@@ -66,7 +77,12 @@ class Uri(models.Model):
     title = models.CharField(max_length=255)
     url = models.URLField(unique=True)
     description = models.TextField(blank=True, null=True)
-    location = PlainLocationField(based_fields=['place'], zoom=7, blank=True, null=True)
+    location = PlainLocationField(
+        based_fields=['place'],
+        zoom=7,
+        blank=True,
+        null=True,
+    )
 
     @property
     def summary(self, n=60):
@@ -74,8 +90,7 @@ class Uri(models.Model):
             return "-"
         elif len(self.description) > n:
             return self.description[:n] + "..."
-        else:
-            return self.description
+        return self.description
 
     def __str__(self):
         return "{} ({})".format(self.title, self.place)
