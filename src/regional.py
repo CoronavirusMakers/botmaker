@@ -3,7 +3,6 @@
 import json
 import os
 import re
-import shutil
 import telebot
 
 
@@ -16,7 +15,7 @@ class PersistDict(dict):
 
     def save(self):
         s = json.dumps(self, indent=1, sort_keys=True)
-        shutil.move(self._filename, self._filename+".bak")
+        open(self._filename+".bak", "w").write(open(self._filename).read())
         open(self._filename, "w").write(s)
 
 
