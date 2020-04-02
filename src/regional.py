@@ -3,6 +3,7 @@
 import json
 import os
 import re
+import traceback
 import telebot
 
 
@@ -27,6 +28,22 @@ def format_user(user):
     msg = f"{user.first_name} {user.last_name}"
     msg += f" @{user.username}" if user.username else f" @{user.id}"
     return msg
+
+
+def command_add_whitelist(bot, message, append=False, remove=False):
+    to = message.chat.id if message.chat else message.from_user.id
+    m = re.match(r"/(\w+)\s+(.*)", message.text.strip())
+    if m:
+        comando, usernames = m.groups()
+        for username in usernames.split(" "):
+            if append and username not in settings["whitelist"]:
+                settings["whitelist"].append(username)
+                settings.save()
+                bot.send_message(to, f"Agregado @{username} correctamente!")
+            if remove and username in settings["whitelist"]:
+                settings["whitelist"] = [x for x in settings["whitelist"] if x != username]
+                settings.save()
+                bot.send_message(to, f"Borrado @{username} correctamente!")
 
 
 def command_add_category_groupname(bot, message, append=False, remove=False):
@@ -79,17 +96,27 @@ def bot_command_control(bot, message):
             msg += "Grupos sin categorizar:\n"
             msg += ", ".join(settings["chatlist"].get(groupid, f"#{groupid}") for groupid in todos)
         bot.send_message(to, msg)
-    elif text.startswith("/add"):
+    elif text.startswith("/addc"):
         command_add_category_groupname(bot, message, append=True)
-    elif text.startswith("/delete"):
+    elif text.startswith("/delc"):
         command_add_category_groupname(bot, message, remove=True)
+    elif text == "/whitelist":
+        msg = ", ".join(f"@{username}" for username in settings["whitelist"])
+        bot.send_message(to, msg)
+    elif text.startswith("/addw"):
+        command_add_whitelist(bot, message, append=True)
+    elif text.startswith("/delw"):
+        command_add_whitelist(bot, message, remove=True)
     elif text == "/help":
         msg = "Los comandos son:\n"
         msg += "  /lista: Para ver lista de canales\n"
         msg += "  /admins: Para ver lista de admins\n"
         msg += "  /categories: Para ver categorizacion\n"
-        msg += "  /add category groupname: Para agregar un grupo a una categoria\n"
-        msg += "  /delete category groupname: Para borrar un grupo de una categoria\n"
+        msg += "  /addc category groupname: Para agregar un grupo a una categoria\n"
+        msg += "  /delc category groupname: Para borrar un grupo de una categoria\n"
+        msg += "  /whitelist: Para ver usuarios con derecho a replica\n"
+        msg += "  /addw username: Para permitir replicar a un usuario (sin @)\n"
+        msg += "  /delw username: Para quitar permiso replica a un usuario (sin @)\n"
         msg += "  /help (Esta ayuda)"
         bot.send_message(to, msg)
     print(f"Amo {format_user(message.from_user)} textcut={text}")
@@ -166,9 +193,13 @@ def bot_command_all(bot, message):
             else:
                 bot_command_enter(bot, message)
                 if reply and reply.from_user.username == settings["bot_name"]:
-                    print(f"receiving {group_title} -> ADMIN. textcut={textcut}")
-                    bot.send_message(settings["bot_groupid"], f"Nos dicen desde {group_title}...")
-                    bot.forward_message(settings["bot_groupid"], group_id, message.message_id)
+                    if message.from_user.username in settings["whitelist"]:
+                        print(f"receiving {group_title} -> ADMIN. textcut={textcut}")
+                        bot.reply_to(message, "Remitido al grupo de coordinación. Gracias!")
+                        bot.send_message(settings["bot_groupid"], f"Nos dicen desde {group_title}...")
+                        bot.forward_message(settings["bot_groupid"], group_id, message.message_id)
+                    else:
+                        bot.reply_to(message, "Por favor, contacte con un coordinador.")
                 else:
                     print(f"ignorando2 {group_title}. textcut={textcut}")
 
@@ -190,9 +221,9 @@ bot = telebot.TeleBot(settings["token"])
 def command_all(message):
     try:
         return bot_command_all(bot, message)
-    except Exception as e:
+    except Exception:
         print("Algo se ha roto :(")
-        print(f"{e.__class__.__name__}: {e}")
+        print(traceback.format_exc())
 
 
 print("main loop polling...")
