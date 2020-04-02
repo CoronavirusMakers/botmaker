@@ -20,7 +20,7 @@ class PersistDict(dict):
         open(self._filename, "w").write(s)
 
 
-settings = PersistDict("regional.json")
+settings = PersistDict("coordina.json")
 settings.save()
 
 
