@@ -19,7 +19,7 @@ class SubdivisionAdmin(admin.ModelAdmin):
 
 @admin.register(models.Uri)
 class UriAdmin(admin.ModelAdmin):
-    list_display = ('title', 'url', 'summary', 'node')
+    list_display = ('title', 'url', 'summary', 'node', 'location')
     autocomplete_fields = ('node', )
     search_fields = ('title', 'url', 'text')
     save_on_top = True
