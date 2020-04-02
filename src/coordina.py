@@ -95,13 +95,16 @@ def bot_command_control(bot, message):
         if todos:
             msg += "Grupos sin categorizar:\n"
             msg += ", ".join(settings["chatlist"].get(groupid, f"#{groupid}") for groupid in todos)
+        if not msg:
+            msg = "no hay categorias"
         bot.send_message(to, msg)
     elif text.startswith("/addc"):
         command_add_category_groupname(bot, message, append=True)
     elif text.startswith("/delc"):
         command_add_category_groupname(bot, message, remove=True)
     elif text == "/whitelist":
-        msg = ", ".join(f"@{username}" for username in settings["whitelist"])
+        msg = "Lista blanca:\n"
+        msg += ", ".join(f"@{username}" for username in settings["whitelist"])
         bot.send_message(to, msg)
     elif text.startswith("/addw"):
         command_add_whitelist(bot, message, append=True)

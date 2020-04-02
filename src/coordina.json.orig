@@ -4,5 +4,6 @@
  "bot_name": "FILLNAME",
  "categories": {},
  "chatlist": {},
+ "whitelist": [],
  "token": "FILLTOKENID:FILLTOKENHASH"
 }
