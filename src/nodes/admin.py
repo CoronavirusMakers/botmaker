@@ -21,5 +21,5 @@ class SubdivisionAdmin(admin.ModelAdmin):
 class UriAdmin(admin.ModelAdmin):
     list_display = ('title', 'url', 'summary', 'node', 'location')
     autocomplete_fields = ('node', )
-    search_fields = ('title', 'url', 'text')
+    search_fields = ('title', 'url', 'text', 'node__slug', 'node__title')
     save_on_top = True

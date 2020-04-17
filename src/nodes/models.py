@@ -28,9 +28,9 @@ class Subdivision(models.Model):
 
 
 class Node(models.Model):
-    slug = models.SlugField(max_length=20, unique=True)
+    slug = models.SlugField(max_length=20, unique=True, help_text="Esto son los comandos del bot, pero sin la '/' inicial")
     title = models.CharField(max_length=255)
-    text = models.TextField(blank=True, null=True)
+    text = models.TextField(blank=True, null=True, help_text="Es lenguaje markdown. Cuidado al escribir '_' y '*': Escápalos con '\_' y '\*'. Y despues de guardar, comprueba que se ven bien tanto el bot como la web.")
     promoted = models.BooleanField(default=False, help_text="Si se muestra en portada en la web")
     subdivision = models.ForeignKey(Subdivision, on_delete=models.SET_NULL, blank=True, null=True)
     parent = models.ForeignKey(
