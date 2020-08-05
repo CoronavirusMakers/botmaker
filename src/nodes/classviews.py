@@ -17,6 +17,9 @@ class NodeSlugView(generic.DetailView):
 
 
 class MarkdownView(generic.ListView, generic.base.TemplateResponseMixin):
-    model = models.Uri
+    model = models.Node
     template_name = "nodes/markdown.md"
     content_type = "text/plain"
+
+    def get_queryset(self):
+        return super().get_queryset().with_data
