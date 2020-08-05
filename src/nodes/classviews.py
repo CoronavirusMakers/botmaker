@@ -14,3 +14,9 @@ class NodeSlugView(generic.DetailView):
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
     model = models.Node
+
+
+class MarkdownView(generic.ListView, generic.base.TemplateResponseMixin):
+    model = models.Uri
+    template_name = "nodes/markdown.md"
+    content_type = "text/plain"
