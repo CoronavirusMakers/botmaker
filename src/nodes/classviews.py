@@ -23,3 +23,11 @@ class MarkdownView(generic.ListView, generic.base.TemplateResponseMixin):
 
     def get_queryset(self):
         return super().get_queryset().with_data
+
+
+class MarkdownSlugView(generic.DetailView, generic.base.TemplateResponseMixin):
+    model = models.Node
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+    template_name = "nodes/markdown_slug.md"
+    content_type = "text/plain"
